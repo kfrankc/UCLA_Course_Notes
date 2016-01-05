@@ -1,0 +1,39 @@
+# CS 118 Lec. 2: Communication and Info. Sharing
+
+**Shared Info**
+* Technical 
+* Semantics
+* Effectiveness  
+
+**Syntax**
+* Symbol
+* Sequence  
+
+**Semantics**
+* meaning?  
+
+**Analog vs. Digital
+* analog - ambiguous
+* digital - mapped to **_ONE_** meaning  
+
+**Discretization**
+* convert to discrete values  
+
+**Effectiveness** 
+* precision (would two receivers interpret at the same state?)
+* accuracy (state the transmitter intended?)
+
+> **Famous Natural Language Processing Question:**  
+> Fruit flies **like** a banana; Time flies **like** an arrow.
+
+### What is communication?
+* Communication vs. Entropy  
+H_i = -p_i * log(p_i)
+* Source Entropy  
+H = - Sigma(p_i * log(p_i))
+* Example: if sender **always** sends YES, or **always** sends NO, the entropy is at minimum
+ * else, if YES or NO is both 50/50, then entropy is at max  
+* Source has entropy H
+* Channel has capacity C
+> C/H - e symbols transmitted per second  
+> *for small e
