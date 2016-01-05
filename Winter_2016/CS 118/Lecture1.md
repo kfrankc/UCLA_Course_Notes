@@ -48,10 +48,10 @@ Corose/Ross "Computer Networks: A Top Down Approach"
 
 ### A little history of computer networking
 1950s, 1960s  
-* Packet Switching (1960s)
-* ARPANET (1969)
+* [Packet Switching](https://en.wikipedia.org/wiki/Packet_switching) (1960s)
+* [ARPANET](https://en.wikipedia.org/wiki/ARPANET) (1969)
 * Internet (1981)
-* World Wide Web (1991)
+* [World Wide Web](https://en.wikipedia.org/wiki/World_Wide_Web) (1991)
 
 ### Communication / Network Measures
 * Frequency 
@@ -71,7 +71,7 @@ Corose/Ross "Computer Networks: A Top Down Approach"
  * time between events
  * TTC (time to complete an event)
 
-**Latency** - Fundamental Metrics  
+[**Latency**](http://compnetworking.about.com/od/speedtests/a/network_latency.htm) - Fundamental Metrics  
 * latency required to perform task (**performance**)
 > What is **Latency**?  
 > The time between creating info at a source and receiving it at a destination

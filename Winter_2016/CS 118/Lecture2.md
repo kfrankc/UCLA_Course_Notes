@@ -16,18 +16,18 @@
 * analog - ambiguous
 * digital - mapped to **_ONE_** meaning  
 
-**Discretization**
+[**Discretization**](https://en.wikipedia.org/wiki/Discretization_of_continuous_features)
 * convert to discrete values  
 
 **Effectiveness** 
 * precision (would two receivers interpret at the same state?)
 * accuracy (state the transmitter intended?)
 
-> **Famous Natural Language Processing Question:**  
+> **Famous [Natural Language Processing](https://en.wikipedia.org/wiki/Natural_language_processing) Question:**  
 > Fruit flies **like** a banana; Time flies **like** an arrow.
 
 ### What is communication?
-* Communication vs. Entropy  
+* Communication vs. [Entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory))  
 H_i = -p_i * log(p_i)
 * Source Entropy  
 H = - Sigma(p_i * log(p_i))
