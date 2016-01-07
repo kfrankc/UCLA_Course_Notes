@@ -1,5 +1,8 @@
 # CS 170A 
 
+### Meaning of the 'Matrix'
+_latin_ word, meaning mother, womb, structure that holds things together
+
 ### Some useful MATLAB code
 ```
 A = eye(4) // create identity matrix 
