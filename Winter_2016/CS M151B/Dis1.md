@@ -51,11 +51,42 @@ The highly skilled programmer manages to get a reduction of a factor of 2.3 in t
 
 #### Solution: 
 
+```
+We use the equation: ET = IC + CPI + CT
+let ET_a be the compiler
+let ET_b be the skilled programmer
+We know the following:
+ET_a / ET_b = 9.7
+ET_a / ET_b = (IC_a + CPI_a + CT_a) / (IC_b + CPI_b + CT_b)
+CPI_a = 2.3CPI_b
+CT_a = CT_b because running on the same processor
+Therefore, we can solve:
+9.7 = IC_a * 2.3 / IC_b
+IC_a / IC_b = 9.7 / 2.3 
+IC_a = 4.217 * IC_b
+```
+Therefore, the reduction factor is 4.217
+
 ### Sample question 2
 
 When a processor executes program PA, the execution time is 3.8 seconds and the CPI is 2.9. When the same processor executes program PB, the execution time is 8.5 seconds and the CPI is 3.7. A typical workload consists of executing PA, then executing PB. What is the CPI for this typical workload?
 
 #### Solution:
+
+```
+Set the equation:
+let ET_a be PA
+let ET_a be PB
+CPI_a+b = ET_a+b / (IC_a+b * CT)
+we need IC_a and IC_b, since IC_a+b = IC_a + IC_b
+IC_a = ET_a / (CPI_a + CT)
+IC_b = ET_b / (CPI_b + CT)
+
+Therefore, plug into our equation:
+CPI_a+b = 12.3 / (3.8/(2.9*CT)*CT + (8.5/(3.7*CT)*CT))
+CPI_a+b = 3.409
+```
+Therefore, our CPI for this workload is 3.409
 
 ### Sample question 3
 
@@ -65,3 +96,20 @@ Consider a processor that achieves an overall average CPI of 3.6 when executing 
 
 #### Solution:
 
+```
+1. To find overall average CPI, first calculate the CPI needed to execute the 77 % of the job
+3.6 = .23*5 + .77 * x
+x = 3.182
+Now, we set 5 to 3, and recalculate the average CPI
+CPI = .23 * 3 + .77 * 3.182
+CPI = 3.14
+
+2. Simiarly use our famous equation:
+ET_new = (ET_old / CPI_old) * CPI_new 
+ET_new = (190 / 3.6) * 3.14 = 165.72 s
+```
+
+### Sample question 4
+
+
+### Solution: 
