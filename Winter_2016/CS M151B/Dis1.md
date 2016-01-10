@@ -109,7 +109,62 @@ ET_new = (ET_old / CPI_old) * CPI_new
 ET_new = (190 / 3.6) * 3.14 = 165.72 s
 ```
 
-### Sample question 4
+### Sample question 4 
 
+We have two different processors, one with floating point hardware, and the other without it.  
+For the one with floating point hardware:  
+* Floating-point multiply: 6 cycles
+* Floating-point add: 4 cycles
+* Floating-point divide: 20 cycles
+* Integer instruction: 2 cycles
 
-### Solution: 
+For the one without floating point hardware:  
+* Integer instruction: 2 cycles
+* Floating-point multiply: 30 integer instructions
+* Floating-point add: 20 integer instructions
+* Floating-point divide: 50 integer instructions
+
+* Floating-point multiply: 10 %
+* Floating-point add: 15 %
+* Floating-point divide: 5 %
+* Integer instructions: 70 %
+* Clock rate: 1000 MHz
+
+**Questions:**  
+1. What is the execution rate in MIPS (millions instructions per seconds)?
+ * Execution rate = number of instructions / seconds
+2. Processors-FPU needs 300 million instructions for a program
+ * How many instructions Processors-no-FPU needs?
+3. Which processor is faster? 
+
+#### Solution: 
+
+```
+1. We know from the problem that: ER = IC / ER = IC / (IC * CPI * CT) = 1 / (CPI*CT)
+Floating point hardware:
+ER_fp = 1 / (CPI_fp * CT)
+CPI_fp = 0.1*6 + 0.15*4 + 0.05*20 + 0.7*2 = 3.6
+ER_fp = 1 / (3.6 * (1/1000*10^6)) = 277.7*10^6 = 277.7 MIPS
+
+No Floating point hardware:
+ER_nofp = 1 / (CPI_nofp * CT)
+CPI_nofp = 2 // because all calculations are turned into integer instructions, and there's only 2 cycles of that
+ER_nofp = 1 / (2 * (1/1000*10^6)) = 1000*10^6 / 2 = 500 MIPS 
+
+2. We know that IC_fp = 300*10^6 instructions
+We now do the calculations:
+IC_fp = 300 million
+FP multiply: .10 * 300 million * 30 integer instructions = 900 million
+FP add: .15 * 300 million * 20 integer instructions = 900 million 
+FP divide: .05 * 300 million * 50 integer instructions = 750 million
+Integer instructions: .7 * 300 = 210 million 
+
+Now, we can find the total number of instructions by adding the above results together:
+900 + 900 + 750 + 210 = 2760 million instructions
+
+3. We simply compare:
+ER_fp = IC_fp / ET_fp = 300*10^6 / 277.72*10^6 = 1.08
+ER_nofp = IC_nofp / ET_nofp = 2760*10^6 / 500*10^6 = 5.52
+
+We see that FP processor is faster.
+```
