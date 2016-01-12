@@ -3,7 +3,33 @@
 ### Instruction Set
 
 * Repertoire of instruction of acomputer
-* Different computers have different ISAs
+* Different computers have different ISAs  
+
+**Some notes on stacks**
+* stack is used for function calls
+* malloc/dynamic calls are created on the heap
+* TEXT: holds instructions for the ISA  
+
+**_RISC vs. CISC_**  
+**RISC**  
+1. decoding is easier
+2. small number of instr. types (simpler instr. in memory)
+3. more burden on compiler
+ * parallelism
+ *pipelining
+4. FL
+5. large number of operand (varies)
+6. simple addressing mode
+7. load-store machine  
+
+**CISC**  
+1. decode is harder
+2. large number of instruction type
+3. More burden on machine because it has to decode
+4. VL
+5. small number of operand (varies)
+6. complex addressing-mode
+7. reg/memory machine
 
 **Key ISA Decisions**  
 * Operations
@@ -31,7 +57,7 @@
 
 ### MIPS Instruction Set
 
-* [www.mips.com](https://www.mips.com)
+* [www.mips.com](https://imgtec.com/mips)
 * Large share of embedded core market
 * typical of many modern ISAs  
 
@@ -46,6 +72,22 @@ add a, b, c # a gets b + c //pseudocode
 >* simplicity enables higher performance at lower cost  
 
 **Example**  
+```
+addi R2 R0 8
+// means add R[2], which is 32, and 8, which makes 40, and store that in R0; remember that R2 is not a literal
+
+lw: data movement operation for MIPS
+R[RT] = M[R[RS]+SE[Imm]] // reading from mem, writing to register files
+
+sw: save/store data
+M[R[RS]+SE[Imm]] = R[RT] // writes to mem, reads from RT 
+
+jump j-type instr:
+PC = PC + 4 + 5
+4 Imm 0 0, for a total of 32 bits 
+```
+
+**More Examples**  
 ```
 //C code
 f = (g+h)-(i+j);
