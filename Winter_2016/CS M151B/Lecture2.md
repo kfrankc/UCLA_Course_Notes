@@ -343,4 +343,237 @@ $t0: 0000 0000 0000 0000 0011 1101 1100 0000
 ```
 $t1: 0000 0000 0000 0000 0011 1100 0000 0000
 $t0: 1111 1111 1111 1111 1100 0011 1111 1111	
+```  
+
+**Conditional Operations**  
 ```
+beq, rs, rt, L1 
+// if (rs == rt) branch to instruction labeled L1;
+bne, rs, rt, L1
+// if (rs != rt) branch to instruction labeled L1;
+j L1
+// unconditional jump to instruction labeled L1; kinda like a goto
+```  
+* there's a program counter, these instructions will write to PC  
+
+**Compiling 'if' statements**  
+```
+// C code
+if (i == j) 
+  f = g+h;
+else 
+  f = g-h;
+
+// Compiled MIPS code
+	  bne $s3, $s4, Else
+	  add $s0, $s1, $s2
+	  j   Exit
+Else: sub $s0, $s1, $s2
+Exit: ...
+```  
+
+**Compiling Loop Statements**
+```
+// C code, i in $s3, k in $s5, address of save in $s6
+while (save[i] == k)
+  i += 1;
+
+// Compiled MIPS code
+Loop: sll  $t1, $s3, 2 		// array of 32 bit values, each integer stored in 4 mem locations, shift by 2, which means multiply by 4, $t1: address of content of save[i]
+	  add  $t1, $t1, $s6
+	  lw   $t0, 0($t1)
+	  bne  $t0, $s5, Exit
+	  addi $s3, $s3, 1
+	  j    Loop
+Exit: ...
+```  
+
+### Basic Blocks
+* basic block is seq. of instructions, with:
+ * no embedded branches 
+ * no branch targets
+ * compiler identifies basic blocks for optimization
+ * advanced processor accelerate execution of basic blocks
+
+**More Conditional Operations**  
+* set result to 1 if condition is true, otherwise, set to 0
+```
+slt rd, rs, rt
+// same as 
+if (rs < rt) 
+  rd = 1; 
+else 
+  rd = 0;
+
+slti rt, rs, constant
+// same as
+if (rs < constant)
+  rt = 1;
+else
+  rt = 0;
+
+// use in combination with beq, bne
+slt $t0, $s1, $s2  # if ($s1 < $s2)
+bne $t0, $zero, L  # branch to L
+```  
+
+**Reason for Branch Instruction Design**  
+* No blt, bge because hardware for <, >=, slower than =, != 
+ * combining with branch involves more work
+* Once again, make the common case fast  
+
+**Signed and Unsigned**  
+* signed comparison: slt, slti
+* unsigned comparison: sltu, sltui
+```
+Ex.
+$s0 = 1111 1111 1111 1111 1111 1111 1111 1111
+$s1 = 0000 0000 0000 0000 0000 0000 0000 0000
+slt  $t0, $s0, $s1 # signed
+sltu $t0, $s0, $s1 # unsigned
+```  
+
+### Procedure Calling
+1. Place params in registers
+2. Transfer control to procedure
+3. Acquire storage for procedure
+4. Perform procedure's operation
+5. Place result in register for caller
+6. Return to place of call  
+
+**Register Usage**
+* $a0 - $a3: arguments (reg 4-7)
+* $v0, $v1: result values (reg 2 and 3)
+* $t0 - $t9: temporaries (written over by callee)
+* $s0 - $s7: saved (saved by callee)
+* $gp: global pointer for static data (reg 28)
+* $sp: stack pointer (reg 29)
+* $fp: frame pointer (reg 30)
+* $ra: return address (reg 31)  
+
+**Procedure Call Instr.**  
+* jump and link: `jal ProcedureLabel`
+ * address of following instr. put in $ra
+ * jump to target address
+* jump register: `jr $ra`
+ * compies $ra to PC
+ * can also be used for computed jumps (switch statements)  
+
+**Leaf Procedure Example**
+```
+// C code
+int leaf_example (int g, h, i, j) {
+	int f;
+	f = (g + h) - (i - j)
+	return f;
+}
+* arguments g, ... , j in $a0 ... $a3
+* f in $s0 (need to save $s0 on stack)
+* result in $v0
+
+// MIPS code
+addi $sp, $sp, -4 	// decrement stack pointer for more space
+sw $s0, 0($sp)
+add $t0, $a0, $a1 	// procedure body
+add $t1, $a2, $a3
+sub $s0, $t0, $t1
+add $v0, $s0, $zero // result
+lw $s0, 0($sp)      // restore $s0
+addi $sp, $sp, 4
+jr $ra            	// return
+```  
+
+**Non-leaf Procedure Example**  
+* procedure that call other procedures
+* for nested: caller needs to save on stack:
+ * return address
+ * arg and temp needed after call
+ * stack is restored after call
+```
+// C code
+int fact(int n) {
+	if (n < 1)
+	  return f;
+	else
+	  return n * fact(n-1);
+}
+* arg n in $a0
+* result in $v0
+
+// MIPS code (try to understand this, very important)
+fact:
+	addi $sp, $sp, -8 		# adjust stack for 2 items
+	sw 	 $ra, 4($sp)		# save return address
+	sw 	 $a0, 0($sp)		# save argument
+	slti $t0, $a0, 1 		# test for n < 1
+	beq  $t0, $zero, L1 	
+	addi $v0, $zero, 1 		# if so, result is 1
+	addi $sp, $sp, 8 		# 	pop 2 items from stack
+	jr   $ra  				# 	and return
+L1:
+	addi $a0, $a0, -1 		# else, decrement n
+	jal  fact 				# recursive call
+	lw   $a0, 0($sp) 		# restore original n
+	lw   $ra, 4($sp)  		# 	and return address
+	addi $sp, $sp, 8  		# pop 2 items from stack
+	mul  $v0, $a0, $v0 		# multiply to get result
+	jr   $ra  				# and return
+```  
+
+### Memory Layout
+* Text: program code
+* Static Data: global var
+* Dynamic Data: heap (malloc)
+* Stack: automatic storage
+* Important registers: PC, GP, SP, FP
+* Instructions **are** in memory!  
+
+**32-bit Constants**  
+* `lui rt, constant`
+ * copies 16-bit constant to left 16 bits of rt
+ * clears right 16 bits of rt to 0
+```
+lui $s0, 61  		 0000 0000 0111 1101 0000 0000 0000 0000 
+ori $s0, $s0, 2304 	 0000 0000 0111 1101 0000 1001 0000 0000
+```  
+
+**Branch Addressing**  
+* PC: 32 bit register
+* Most branch targets are near branch
+```
+op 		rs 		rt 		constant or address
+6 bits 	5 bits 	5 bits 	16 bits
+```  
+* PC-relative addressing
+ * target address = PC + offset * 4
+ * PC already incremented by 4 this time
+
+**Jump Addressing**  
+* `j, jal` targets could be anywhere in text
+```
+op 		address
+6 bits 	26 bits // actually 28 bits, because two lower bits always 0
+
+// Example
+Loop: 	sll  $t1, $s3, 2
+		add  $t1, $t1, $s6
+		lw   $t0, 0($t1)
+		bne  $t0, $s5, Exit
+		addi $s3, $s3, 1
+		j 	 Loop
+Exit:   ...
+```  
+
+**Branching really far away**  
+* assembler rewrites the code
+```
+// Example
+	beq $s0, $s1, L1
+	bne $s0, $s1, L2
+	j   L1
+L2:  ...
+```  
+
+
+
+
