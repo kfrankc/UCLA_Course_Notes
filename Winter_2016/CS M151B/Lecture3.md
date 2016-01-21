@@ -68,6 +68,7 @@ Example 7 - 6 = 7 + (-6)
   * NEW OUTPUT: SET
 
 ### Can we make a Faster Adder?
- 
+* Will discuss Ripple Carry
+
 
 
