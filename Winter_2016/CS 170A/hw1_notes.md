@@ -4,7 +4,8 @@
 1. Invertible Matrix  
 ```
 an n by n square matrix A is invertible if there exists n by n square matrix B such that AB = BA = I_n 
-an n by n square matrix A is called singular if it is not invertible. This can be tested by seeing that the det(A) = 0
+an n by n square matrix A is called singular if it is not invertible. This can be tested by seeing that the det(A) = 0  
+* if A is real symmetric and A = A ^-1
 ```
 2. Hermitian Matrix
 ```
@@ -14,7 +15,9 @@ A = conjugate(A_transpose)
 3. Unitary Matrix
 ```
 square matrix where its conjugate transpose is also its inverse
-U * U_transpose = I
+U * U_transpose = I  
+If a matrix is orthogonal it has to be unitary, not the other way around
+If all singlar values are equal, then M = constant*U, where U is orthogonal
 ```
 4. Orthogonal
 ```
