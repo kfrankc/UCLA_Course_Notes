@@ -122,4 +122,50 @@ Consist of:
 * routing processor: executes the routing protocols, maintains the routing information and forwarding tables, and performs network management functions
 
 #### 4.3.1 Input Ports
+* input port: forward packet to centralized routing processor
+    - perform forwarding table lookup  and forward the packet to the appropriate output port.
+    - table lookup given existence of forwarding port
+        + search for longest prefix
+* Complicating factor:
+    - backbone routers must operate at high speeds
+    - line speed: lookup less than time needed to receive a packet at the input port
+    - reasonable technique: tree data structure
+        + start at root node
+        + if first address is 0, then left subtree contain the forwarding table entry
+        + otherwise, it will be in the right subtree
+        + Lookup is in N steps: N is number of bits in the address
+* **Content Addressable Memories (CAMs)**
+    - allow 32 bit IP address to be presented to the CAM, which returns content of forwarding table entry for the address in _constant time_. 
 
+#### 4.3.2 Switching Fabric
+heart of the router - where packets are actually switched (forwarded) from an input port to an output port.  
+Ways to switch:
+* switching via memory: switch between input and output ports under direct control of the CPU
+* switching via a bus: input ports transfer packets directly to output ports over a shared bus
+    - switching badnwidth limited to bus speed 
+* switching via interconnection network: 
+    - crossbar switch: interconnection network consisting of 2n buses that connect n input ports to n output ports
+
+#### 4.3.3 Output Ports
+* takes the packet that have been stored in the output port memory and transmits them over outgoing link
+
+#### 4.3.4 Where does queuing occur?
+* **packet loss**: when queues grow large, router's buffer space will be exhausted
+* **switching fabric speed**: rate at which the switchin fabric can move packets from input ports to output ports. 
+    - if speed is at least n times as fast as input line speed
+        + no queuing can occur at the input ports
+* Output port queuing:
+    - **packet scheduler**: choose one packet among those queued for transmission. 
+    - FCFS scheduling (FCFS)
+    - Weighted Fair Queuing (WFQ) scheduling
+* CAUTION: if not enough memory to buffer incoming packet
+    - drop-tall
+    - remove one or more queued packets
+    - active queue management (AQM) algorithms:
+    - random early detection (RED) a type 
+* if switch is not fast enough - packet queueing can also occur at input ports
+* Consider crossbar switchin:
+    - link speeds are identical
+    - one packet can be transferred from any one input port
+    - packets are moved from given input queue to their desired output queue
+* **Head of the line Blockin (HOL Blocking)**: queued packet in an input queue must wait for transfer through the fabric even though its ouput port is free because it is blocked by another packet at the head of line.
