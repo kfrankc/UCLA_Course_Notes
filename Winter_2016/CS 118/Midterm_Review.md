@@ -75,14 +75,34 @@ Resolution
     - con: doesn't scale eventually
 * distributed
     - in-band 
+        + manages locally through the network itself, using telnet
         + RPC, TCPMUX ability to go to a location and say: translate something for me and send it to a service
         + pro: easy to deploy independently
         + lightweight (efficient)
         + con: replication of effort; difficult to scale
     - out-of-band
+        + if there is problem with device such as server or router, need alternate path to reach the network nodes even when the network is down. Management using independent dedicated channels is called OBM.
         + heirarchical: using structure in name space
 * Hierarchical: ordered - specific name structure\
 * DNS - distributed
-    - starts with .ROOT
-    - 
-
+    - Iterative
+        + at each step: querier asks DNS servers in turn
+    - Recursive: querier asks the root server
+        + easier for user; faster, more efficient
+        + each recursive call adds another layer
+    - pros: local control over subsets of the name space
+    - con: start at root creates vulnerability
+    - search approaches
+* ARP
+    - arp poisoning when users lie about your own address
+    - lost and found
+    - translates network address to physical address
+* Broadcast
+    - pro: easy to configure
+    - con: doesn't scale
+* Distributed Hash Table (DHT)
+    - structured search using DNS
+    - DNS Domain Name System
+    - Cache: locality of reference
+        + timeout: how long to keep a copy
+        + what to do when copy expires
