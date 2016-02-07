@@ -28,16 +28,23 @@ Overview
     - FDM: freqyency spectrum of a link is divided up among the connections established across the link
         + link dedicates a freq. band to each connection
         + width of the band is called **bandwidth**
+        + relaying; no overhead, more fair
+            * split it up like cars on the highway
+            * parallel is better here
     - TDM: time is divided into frames of fixed duration
         + when connection established, network dedicates one time slot in every frame to this connection
+        + guaranteed high quality of service
+            * send one signal at a time; isolated
 * Packet Switching vs. Circuit Switching
     - packet switching not suitable for real time services
         + end to end delays are unpredictable
     - Pro for packet switching:
         + better sharing of transmission capacity than circuit switching
         + simpler + more efficient, and less costly to implement than circuit switching
+            * FDM
             * packet switching is more efficient: 
     - Circuit Switching preallocates use of transmission link regardless of demand. 
+        + TDM
     - Packet switching - allocates link use _on demand_
         + tel. lines use packet switching for expensive overseas call
 

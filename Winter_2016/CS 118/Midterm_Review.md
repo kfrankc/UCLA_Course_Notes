@@ -2,8 +2,18 @@
 
 Aliasing vs. Proxying  
 * aliasing - multiple names for one
+    - support internetworking
+        + name in upper common layer
+        + name in egress layer (the one you are leaving)
+        + name in the ingress layer (the one you are entering)
 * proxying - one name for multiple parties
     - load distribution --> google has too much traffic, they distribute it
+        + google.com --> many IP addresses
+        + localization --> nearby IP addresses
+        + backup time servers
+* Resolution Mapping
+    - address resolution: name translated to address
+    - either direction
 
 Packet Switching vs. Circuit Switching
 * circuit switching - DOS; fast
@@ -21,6 +31,8 @@ TCP is redundant? When every link is reliable (inorder and lossless)
 TDM - Time Division Multiplexing  
 FDM - Frequency Division Multiplexing 
 * total bandwidth available in a communication medium is divided into a series of non-overlapping frequency sub-bands 
+* divide into time frames
+* divide into freq. frames
 
 #### OSI (Open System Interconnection) Model
 Analogy: LETTERS
@@ -60,6 +72,7 @@ Localization
 * quality of service better at shorter distance
 
 Resolution
+* translates a name in one context into a name in a different context
 * fixed 
     - link broadcast; specific groups
     - pro: always works
@@ -101,8 +114,62 @@ Resolution
     - pro: easy to configure
     - con: doesn't scale
 * Distributed Hash Table (DHT)
-    - structured search using DNS
+    - structured search using DNShandshake
     - DNS Domain Name System
     - Cache: locality of reference
         + timeout: how long to keep a copy
         + what to do when copy expires
+
+TCP vs. UDP
+* TCP: always expect to get your message
+    - World Wide Web
+* UDP: faster, more efficient, but unreliable
+    - video streaming - faster
+* 3 Way Handshake
+    - SYN: client send SYN to server
+    - SYN-ACK: server sends back to client
+    - ACK: client sends back to confirm
+
+Networking vs. Communication
+* comm: method of exchanging info between a fixed set; directly connected parties; a single protocol
+* networking: varying, indirectly connected, don't share a single set of rules; many protocols
+
+Complication of Simple Communication/ States
+1. Imperfect Channel
+2. Sharing complex states
+ * leap of faith: assume seq. of blocks: each block has a checksum, if each block is correct; checksum can be the same, but still be corrupted
+ * first, three way handshake
+ * checksum and seq
+ * finish 
+
+In a protocol
+* states
+* symbols
+* transition tables
+* events
+
+Shannon Channel
+* same protocol
+* one direction
+* predetermined sender and receiver
+* channel is literally linked to the nodes
+
+Socket vs. Port
+* socket is the channel: door between you and the transportation layer
+    - port number, IP address; interface to communicate with a port
+* port is the abstraction of the socket
+    - part of the endpoint; you can have different ports for different tasks
+
+Broadcast: send to everyone  
+Multicast: send the limited people  
+
+Coordination:  
+* A-priori - pre-assigned
+* central - manager (master and slave)
+* explicit - very efficient
+    - potentially very efficient
+        + polling everyone
+        + atomicity - if it fails it fails for everyone
+    - probably central
+* hierarchical coordination
+    - relieves load on single manager
