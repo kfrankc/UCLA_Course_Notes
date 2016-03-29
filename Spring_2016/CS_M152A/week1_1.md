@@ -5,4 +5,3 @@
 * from top-down
     - left side USB: for programming
     - lower right side USB: serial port
-    - 
