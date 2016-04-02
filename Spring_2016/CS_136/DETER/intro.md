@@ -1,5 +1,15 @@
 # Getting Started with Deter
 
+### TA: Joshua Joy
+`jjoy@cs.ucla.edu`
+
+### DETER Lab
+* public FIREWALL
+* user ssh into gateway usr to go past the firewall
+* ssh **AGAIN** into the node resource
+* `terminate` once you are done with the lab
+* assignment schedule is up; do at your own pace + finish at your own time
+
 ### Useful Tutorial to Set Up a Lab
 1. Begin an Experiment
 2. Select Class Project
@@ -24,6 +34,7 @@
 #### locate
 1. `sudo updatedb`
 2. `sudo locate *intro* -i`: find all entries with the name intro (case insensitive)
+
 
 ## Unix Information (might be useful later)
 
