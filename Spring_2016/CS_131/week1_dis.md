@@ -37,6 +37,13 @@ Append (@) examples
 
 ### Problem Sets
 ```ocaml
+(*check if a list l contains an element e*)
+let rec contains (e :'a) (l :'a list) : bool =
+    match l with
+        []    -> false
+      | x::xs -> if x = e then true else contains e xs
+;;
+
 (*return second element in a list*)
 let rec everyThird (l :'a list) :'a list =
     match l with
@@ -57,21 +64,30 @@ let rec prefixOf (l1 :'a list) (l2 :'a list) :bool =
     match l1 with
         [] -> true
       | x::xs -> match l2 with
-            [] -> false
-          | y::ys -> if x = y then prefixOf xs ys else false 
+                [] -> false
+              | y::ys -> if x = y then prefixOf xs ys else false 
+;;
 
 (*check if a list contains all elements of another list*)
 let rec containsList (l1 :'a list) (l2: 'a list) :bool=
     match l1 with
         [] -> true
       | y::ys -> (containsList y l2) && (containsList ys l2)
+;;
 
 (*convert a list to indexed tuples*)
 let indexedList (l :'a list) :(int * 'a) list =
     let rec aux idx = function
-        [] -> []
+        []    -> []
       | x::xs -> (idx, x) :: ( aux (idx + 1) xs )
-    in aux 1 l
+    in (aux 1) l
+;;
+
+(*return second element of every tuple*)
+let rec secondGet (pl :('a X 'b) list) :'b list =
+    match pl with
+        [] -> []
+      | (_,y)::tail -> y::(secondGet tail)
 ;;
 
 (*return a range of integers in steps*)
@@ -82,9 +98,15 @@ let rec range (from :int) (till :int) (step :int) :int list =
 
 (*n-th Fibonacci number*)
 let rec fib (n :int) :int =
-    if n < 2 then n else (fib());;
+    if n < 2 then n else (fib (n-1)) + (fib (n-2));;
 
 (*tail-recursive for fib function*)
-let 
+let fib2 (n :int) : int =
+    let rec fib2_helper (k :int) (fk_1 :int) (fk :int) : int =
+        if n < k then fk_1
+        else if n = k then fk
+        else fib2_helper (k + 1) fk (fk_1 + fk)
+    in fib2_helper 1 0 1
+;;
 ```
 

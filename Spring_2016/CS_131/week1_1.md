@@ -104,6 +104,6 @@ let rec everyOther =
     function lst ->
         match lst with
             [] -> []
-          | [h] -> [h] (*handle for when you have only one element*)
+          | [h] -> [h](*handle for when you have only one element*)
           | h1::_::t -> h1::everyOther(t);; (*in OCaml, '_' means don't care*)
 ```
