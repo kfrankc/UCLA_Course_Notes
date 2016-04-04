@@ -8,6 +8,7 @@
 1. `brew install ocaml`
 2. `brew install opam`
 3. `opam install utop`
+4. To clear screen, do `ctrl l`
 
 #### Local Variables
 * `let X = E1 in E2`
