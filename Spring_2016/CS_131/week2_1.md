@@ -167,6 +167,209 @@ map (map (function x -> x + 1)) [[1; 2; 3; 4]; [3; 5; 6]]
 
 * Think of "map" as "apply to all", a function that applies a function to each element in a list. It is extensible to other data types as well
 
+### Removing Negatives
+
+* we want to remove negatives from a list of ints.
+
+#### Comparing Functions
+
+* Can we compare functions?
+* No, because to check that would be to guarantee that all possible inputs produce the same outputs between the two functions.
+
+```ocaml
+(function x -> x) = (function x -> x);;
+Exception: Invalid_argument: "equal: functional value".
+```
+
+##### If-then-else Types
+
+Note that OCaml enforces that the `then-case` aand the `else-case` have the same type:
+
+```ocaml
+if true then thisIsSameAsMap else List.map;;
+```
+
+##### Example: `removeNegatives` and `removeEmpties`
+
+Another example, removing negatives from a list. Don't forget to mark this as recursive!
+
+```ocaml
+let rec removeNegatives = 
+	fun (lst : 'a list -> 'a list) ->
+		match lst with
+			[] -> []
+		  | h::t -> if h > 0 then
+		  		h :: removeNegatives tail
+		  	else
+		  		removeNegatives tail;;
+```
+
+To avoid repetition:
+
+```ocaml
+(*Good style to use a local variable*)
+let rec removeNegatives =
+	fun (lst : 'a list -> 'a list) ->
+		match lst with
+			[] -> []
+		  | h::t -> 
+		  	let t' = removeNegatives t in
+		  		if h > 0 then
+		  			h :: removeNegatives t'
+		  		else
+		  			removeNegatives t';;
+```
+
+How about taking out empty strings from a list of strings? Let's check if the length of the element we're on is 0. But we can do this faster below:
+
+### The Filter Function
+
+* Take a predicate (a boolean function that is true for inputs that meet some condition) and a list, and return the elements in the list which meet the condition:
+
+```ocaml
+let rec filter = fun pred lst ->
+	match lst with
+		[] -> []
+	  | h::t -> 
+	  	let t' = filter pred t in
+	  		if (pred h) then
+	  			h :: t'
+	  		else 
+	  			t';;
+```
+
+Example invocation:
+
+```ocaml
+let removeEmpties = filter (fun x -> String.length > 0) ["hey"; ""; "h"];;
+```
+
+Same as invoking it directly:
+
+```ocaml
+filter (fun x -> String.length x > 0) ["hey"; ""; "h"];;'
+- : bytes list = ["hey'; "h"]
+```
+
+### The Collect Function
+
+How can we get a sum of lists' items? We can't mutate a cumulative sum like we would in imperative/OO languages.
+
+**SIMPLE**: we use the recursive idea of adding on to previous results.
+
+```ocaml
+let rec sum = fun lst ->
+	match lst with
+		[] -> 0
+	  | [a] -> a (*singleton case: just return that element*)
+	  | h::t -> h + sum t;;
+```
+
+```ocaml
+let rec sum = fun lst ->
+	match lst with
+	| [] -> 0
+	| [a] -> a
+	| h::t -> h + sum t;;
+```
+
+Let's define a function that takes a binary option on `ints`:
+
+Inputs:
+* `(int -> int -> int)`
+* `int list`
+
+Outputs:
+* Combined `int`
+
+So: 
+```ocaml
+combineInts (+);; (*same as 'sum'*)
+combineInts (*);; (*same as 'prod'*)
+```
+
+The prod would just be:
+```ocaml
+let rec prod = fun lst ->
+	match lst with
+	| [] -> 0
+	| [a] -> a
+	| h::t -> h * prod t;;
+```
+
+And compare with:
+```ocaml
+let rec sum = fun lst ->
+	match lst with
+	| [] -> 0
+	| [a] -> a
+	| h::t -> h + sum t;;
+```
+
+This naturally suggests another higher-order function:
+```ocaml
+let rec combineInts = 
+	fun (f : int -> int -> int) (l : int list) ->
+		match l with
+		| [] -> 0
+		| [a] -> a
+		| h::t -> f h (combineInts f t);;
+```
+
+To invoke, we need space around `*`, or else it'll be seen as part of a comment:
+```ocaml
+combineInts (+) [1; 2; 3];;
+combineInts (*) [1; 2; 3];;
+```
+
+Error case:
+```ocaml
+combineInts (*) [1; 3; 5];;
+Characters 14-16:	Warning 2: this is not the end of a comment.
+```
+
+### Decomposing Recursions
+What happens when we use subtraction?
+```ocaml
+combineInts (-) [1; 2; 3];;
+- : int = 2
+````
+
+What does this translate to?
+```ocaml
+(*decompose the recursion, use Camlback!*)
+= (-) 1 (combineInts (-) [2; 3])
+
+(*rewrite prefix notation to be more intuitive*)
+= 1 - (combineInts (-2) [2; 3])
+
+= 1 - ((-) 2 (combineInts (-) [3]))
+= 1 - (2 - (combineInts (-) [3]))
+
+= 1 - (2 - 3)
+= 1 - (-1)
+= 2
+```
+
+What if we instead want a left-associated set of calls, getting us a running subtraction?
+
+```ocaml
+combineIntLeft (-) [1; 2; 3]
+= (1 - 2) - 3
+```
+
+Note that we may not want to give `0` for the empty case to avoid giving output where we expect non-empty lists. Probably better to not give output for the empty list, as that's more flexible for someone else to use as they will.
+
+```ocaml
+let rec combineIntsLeft = fun f l ->
+	match l with
+	| [x] -> x
+	| h1::h2::t -> combineIntsLeft f (f h1 h2 :: t);;
+	(*translate from prefix to infix to see how this gives us (first arg - second arg - third arg*)
+```
+
+
+
 
 
 
