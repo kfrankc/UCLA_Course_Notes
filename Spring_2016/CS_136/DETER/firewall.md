@@ -172,5 +172,117 @@ $ chmod ugo-rwxsgt somefile.sh
 
 ### Firewall Policy Design
 
-* 
+* **default allow** policy: default allows anything _not_ considered a threat. 
+ * allow all outbound traffic, BUT only allows 'untrusted' inbound traffic to special services
+ * ex. trojan horse opened insided firewall, but makes connection to malicious website outside of firewall
+* **default deny** policy: principle of least privilege
+ * limits inbound traffic; ONLY allows outbound traffic to carefully chosen targets
+ * trojan horse won't work because outbound traffic is also limited
+ * expensive to maintain and inconvenient
+
+### Firewall and Network Testing Tools
+
+#### `iptables`: set and clear rules in netfilter
+
+* **`iptables`** is user space tool for administering the `netfilter` function and tables in Linux kernel. 
+ * `filter` and `nat` are built in tables of rules
+ * built in chains
+ * set of loadable modules of matching stateful filters
+ * set of stateless criteria
+ * set of targets that represent what to do with a matching packet
+
+Sample `iptables` cmd
+```
+$ iptables -t filter -i ethX -A INPUT -m state --state NEW -p tcp -s 192.168.0.1 --dport 23 -j REJECT
+
+breakdown:
+cmd/arg 					translation
+iptables					use iptables tool to insert a new rule into netfilter
+-t filters 					go in filter table, apply only to:
+-i eth0							packets that are inbound on device ethX (use -o ethX to match outbound)
+-A INPUT 						packets that have been put into the INPUT chain either by kernel or by prev rule
+-m state --state NEW 			represent a new connection
+-p tcp 							transmissino control protocol packets
+-s 192.168.0.1 					are from host 192.168.0.1
+--dport 23	 					are destined for port 23
+-j REJECT 						reject any matching packets. 
+```
+
+More examples:
+```
+$ iptables -p tcp --syn --dport 23 -m connlimit --connlimit-above 2 -j REJECT
+
+^ above command allows 2 telnet connections per client host
+
+$ iptables -A INPUT -i 1o -j ACCEPT
+$ iptables -A OUTPUT -o 1o -j ACCEPT
+
+^ above commands accept any inbound or outbound traffic on the internal loopback network device
+the `-i 1o` and `-o 1o` arguments specify the "input interface" and "output interface" the packet arrives on.
+
+$IPTABLES -t filter -A INPUT -m state --state NEW, RELATED, ESTABLISHED -j ACCEPT
+$IPTABLES -t filter -A OUTPUT -m state --state NEW, RELATED, ESTABLISHED -j ACCEPT
+
+These rules accept all INBOUND and OUTBOUND traffic regardless of interface, address, port, or protocol. Basically like no firewall at all
+```
+
+### NEW, RELATED, ESTABLISHED
+
+* NEW: no ID badge yet b/c first packet of a new stream of traffic
+* RELATED or ESTABLISHED part of something that by definition has already come through the firewall in the past.
+
+#### nmap: network mapping port scanner
+
+* Nmap is a popular port scanner
+ * determine kind of services running on a remote or local host
+ * perform OS fingerprinting
+ * perform tasks in stealth mode
+
+Sample usage:
+```
+$ sudo nmap yahoo.com # scans yahoo.com 
+$ sudo nmap www.somehost.edu -P0 # shows all ports and their services
+```
+
+#### ifconfig: configure Linux network devices
+* used by users to see network addresses and statistics
+* determine which network addresses are running on what interfaces
+
+Sample usage:
+```
+$ ifconfig
+# eth0 64.81.0.256
+# eth1 10.10.10.10
+# this means that the two interfaces are on different networks
+```
+
+#### telnet: cleartext remote shell
+* user issues commands over a TCP socket
+* server replies with results of those commands and waits for more inputs
+* incredibly insecure b/c low level access to system and cleartext nature
+
+Sample usage:
+```
+$ telnet yahoo.com 80 # perform get on yahoo.com
+$ telnet mailserver.net 25 # connected to mailserver.net and get message
+```
+
+#### netcat: network swiss army knife
+* netcat is Unix entity for creating TCP and UDP sockets
+* to create a fake TCP/UDP server with netcat
+
+```
+$ sudo nc -l 80 # we need to sudo because 80 is privileged port
+```
+This will begin listening TCP socket on port 80. From another host, you can either use telnet or nc to connect to the server you just started on the first host. 
+
+```
+[server]$ nc -u -l 10000 # listen for UDP traffic on port 10000
+[client]$ nc -u server 10000 # connect to server via UDP on port 10000
+```
+
+
+
+
+
 
