@@ -95,6 +95,16 @@ To create a new user:
 $ adduser <username>
 ```
 
+To add a user to a group
+```
+usermod -a -G <groupname> username
+```
+
+To add a admin user
+```
+sudo adduser --home /admins/<username> <username>
+```
+
 `adduser` copy files from `/etc/skel` directory to become the new homedir of the new user in the `/home/` directory.
 
 `chfn` set `finger` information for the user:
