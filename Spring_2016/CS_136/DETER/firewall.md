@@ -62,6 +62,9 @@ Example:
 Example:
 d 		rwx 	rwx 	rwx
 type	user 	group 	other
+
+Sticky Bit: make sure members of one group does not delete other member's files
+chmod 1770 <dir>
 ```
 
 * symbolic links are special kind of file that is a pointer to a disk location
