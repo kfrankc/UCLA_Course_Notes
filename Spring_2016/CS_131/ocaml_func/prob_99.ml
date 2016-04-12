@@ -27,5 +27,12 @@ let rec (at : 'a -> 'a list -> 'a option) =
 	fun k l ->
 		match l with
 		[] -> None
-	  | 
+	  | h::t -> if k = 1 then Some h else at (k-1) t
 ;;
+
+(* find number of elements of a list *)
+let rec (length :'a list -> 'a) =
+	fun l ->
+		match l with
+		[] -> None
+	  | _::t -> 
