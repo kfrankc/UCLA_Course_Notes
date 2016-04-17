@@ -36,3 +36,27 @@ let rec (length :'a list -> 'a) =
 		match l with
 		[] -> None
 	  | _::t -> 
+
+(* reverse a list *)
+let (rev : 'a list -> 'a list) =
+	fun l ->
+		match l with
+		[] -> []
+	  | _::_ -> List.fold_left (fun acc x -> x::acc) [] l 
+;;
+
+(* check whether a list is a paindrome *)
+let (is_palindrome : 'a list -> bool) =
+	fun l ->
+		if rev l = l then true else false
+;;
+
+(* flatten a nested list structure *)
+ 
+(* eliminate consecutive duplicates of list elements *)
+let rec (compress : 'a list -> 'a list) =
+	fun l -> match l with
+				a::(b::_ as t) -> if a = b then compress t else a::compress t
+			  | smaller -> smaller
+;;
+
