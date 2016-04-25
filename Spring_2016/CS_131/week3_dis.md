@@ -56,3 +56,53 @@ let map (f : 'a -> 'b) (l : 'a list) =
 	List.fold_left (fun v e -> v@(f e)) [] l
 ;;
 ```
+
+### Polymorphic Functions
+
+* functions hwich can accept arguments of different (any) types
+* the type signature of the function has one or more type variable (like 'a), for the arguments
+* the type of return type is usually dependent on the argument type or is fixed.
+* can return type be polymorphic, with the argument type is fixed?
+	- no, it would violate strong typing, so you will have a run time error
+	- `raise exn -> 'a` which is run-time exception anyway
+
+#### Identifying Polymorphic Functions
+
+```ocaml
+let f x = x + 1
+(*
+ * x: int
+ * f: int -> int
+ * Not polymorphic
+ *)
+
+let f x = 1
+(*
+ * x: 'a (anything)
+ * f: 'a -> int
+ * Polymorphic
+ *)
+
+let f x y = x
+(* 
+ + x: 'a (anything)
+ + y: 'b (anything)
+ + f: 'a -> 'b -> 'a
+ + Polymorphic
+*)
+
+let f (x,y) = x +. y
+(*
+ * x: float
+ * y: float
+ * f: (float * float) -> float
+ * Not Polymorphic
+ *) 
+
+let f x = match x with [] -> 0 | _::t -> 1 + (f t)
+(* 
+ * x: 'a list
+ * f: 'a list -> int
+ * Polymorphic
+ *)
+```
