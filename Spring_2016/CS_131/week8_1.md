@@ -125,7 +125,7 @@ class SumTask extends RecursiveAction<Long> {
 	private int[] arr;
 	private int low, high;
 
-	public SumTask(int[] a), int low, int high) {
+	public SumTask(int[] a, int low, int high) {
 		this.arr = a;
 		this.low = low;
 		this.high = high;
