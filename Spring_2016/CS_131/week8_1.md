@@ -32,7 +32,6 @@ class Sum {
 		int[] arr = new int[size];
 		for (int i = 0; i < size; i++)
 			arr[i] = i;
-
 		// now i want to sum it
 		int sum =
 			Arrays.stream(arr)
@@ -52,7 +51,6 @@ class Sort {
 		double[] arr = new double[size];
 		for (int i = 0; i < size; i++)
 			arr[i] = Math.random() * size;
-
 		// now i want to sum it
 		double[] out = 
 			Arrays.stream(arr)
@@ -121,16 +119,13 @@ import java.util.concurrent.*;
 class SumTask extends RecursiveAction<Long> {
 	// constants are final - assigned once
 	private final int SEQUENTIAL_CUTOFF = 10000;
-
 	private int[] arr;
 	private int low, high;
-
 	public SumTask(int[] a, int low, int high) {
 		this.arr = a;
 		this.low = low;
 		this.high = high;
 	}
-
 	public Long compute() {
 		if (high - low > SEQUENTIAL_CUTOFF) {
 			int mid = (low + high) / 2;

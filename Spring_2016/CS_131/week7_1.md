@@ -126,7 +126,6 @@ class C {
 }
 
 class Main2 {
-
 	void doit2(Animal a, Cow c) {
 		C c = new C();
 		c.n(a);		// statically determining the method to invoke
